@@ -23,7 +23,7 @@ const uploadedAvatars = [
 
 export const seedUsers: User[] = [
   {
-    id: 'u1', name: 'Mostafa Shehat', email: 'mostafa@tawasol.com',
+    id: 'u1', name: 'Mustafa Shehata', email: 'mostafa@tawasol.com',
     avatar: uploadedAvatars[0], bio: 'مهندس برمجيات، أحب القراءة والقهوة ☕', location: 'القاهرة، مصر',
     work: 'مهندس في شركة ناشئة', cover: 'from-sky-500 via-blue-500 to-indigo-600', joinedAt: ago(60 * 24 * 400),
   },

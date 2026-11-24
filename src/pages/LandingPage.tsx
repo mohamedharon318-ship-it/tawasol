@@ -105,7 +105,7 @@ export default function LandingPage() {
           <div className="flex flex-col items-center gap-0.5 text-center">
             <p>{t('تم إنشاء الموقع بواسطة', 'Built by')}</p>
             <p dir="ltr" className="font-semibold">Mohamed Ayman</p>
-            <p dir="ltr" className="font-semibold">Mostafa Shaehat</p>
+            <p dir="ltr" className="font-semibold">Mustafa Shehata</p>
           </div>
         </div>
       </footer>

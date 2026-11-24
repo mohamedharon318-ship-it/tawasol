@@ -101,6 +101,11 @@ export default function LandingPage() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 text-center text-xs text-muted sm:flex-row">
           <Logo compact />
           <p>{t('تواصل ©', 'Tawasol ©')} {new Date().getFullYear()} — {t('صُنع بحب للعربية ❤️', 'Made with love ❤️')}</p>
+          <p>
+            {t('تم إنشاء الموقع بواسطة', 'Built by')}{' '}
+            <bdi dir="ltr">م. Mohamed Ayman</bdi> {t('و', 'and')}{' '}
+            <bdi dir="ltr">م. Mostafa Shaehat</bdi>
+          </p>
         </div>
       </footer>
     </div>

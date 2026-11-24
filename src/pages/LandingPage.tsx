@@ -101,7 +101,6 @@ export default function LandingPage() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 text-center text-xs text-muted sm:flex-row">
           <Logo compact />
           <p>{t('تواصل ©', 'Tawasol ©')} {new Date().getFullYear()} — {t('صُنع بحب للعربية ❤️', 'Made with love ❤️')}</p>
-          <p>{t('واجهة تجريبية بدون باك إند', 'Front-end demo without a backend')}</p>
         </div>
       </footer>
     </div>

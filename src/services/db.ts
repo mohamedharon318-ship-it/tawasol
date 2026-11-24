@@ -34,6 +34,18 @@ export const KEYS = {
   session: 'session',
 } as const
 
+const LEGACY_DEMO_NAMES: Record<string, string> = {
+  'Mostafa Shehat': 'Mustafa Shehata',
+  'Mostafa Shaehat': 'Mustafa Shehata',
+}
+
+export function migrateLegacyDemoNames(users: User[]): User[] {
+  return users.map((user) => {
+    const nextName = LEGACY_DEMO_NAMES[user.name]
+    return nextName ? { ...user, name: nextName } : user
+  })
+}
+
 let initialized = false
 
 export function ensureDB(): void {
@@ -55,7 +67,10 @@ export function ensureDB(): void {
   if (read<Report[] | null>(KEYS.reports, null) === null) write(KEYS.reports, [])
   if (read<SearchEntry[] | null>(KEYS.searchHistory, null) === null) write(KEYS.searchHistory, [])
 
-  const users = read<User[]>(KEYS.users, [])
+  const storedUsers = read<User[]>(KEYS.users, [])
+  const users = migrateLegacyDemoNames(storedUsers)
+  if (users.some((user, index) => user !== storedUsers[index])) write(KEYS.users, users)
+
   const settings = read<Record<string, UserSettings>>(KEYS.settings, {})
   users.forEach((user) => {
     if (!settings[user.id]) settings[user.id] = defaultSettings(user.id)

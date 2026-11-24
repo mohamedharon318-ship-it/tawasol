@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { KEYS, resetDB } from './db'
+import { KEYS, migrateLegacyDemoNames, resetDB } from './db'
 import { getCurrentUser, login, logout, register } from './auth.service'
 import { getCachedApiUser, setApiToken, setCachedApiUser } from '@/lib/api'
 import { read, write } from '@/lib/storage'
@@ -31,6 +31,13 @@ describe('auth.service', () => {
     const user = await login('mostafa@tawasol.com', DEMO_PASSWORD)
 
     expect(user.email).toBe('mostafa@tawasol.com')
+  })
+
+  it('migrates the old demo name in stored user data', () => {
+    const [user] = read<User[]>(KEYS.users, [])
+    const [migrated] = migrateLegacyDemoNames([{ ...user, name: 'Mostafa Shehat' }])
+
+    expect(migrated.name).toBe('Mustafa Shehata')
   })
 
   it('rejects a duplicate email on register', async () => {

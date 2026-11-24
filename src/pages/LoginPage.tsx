@@ -66,12 +66,31 @@ export default function LoginPage() {
   }
 
   async function copyEmail(email: string) {
-    try {
-      await navigator.clipboard.writeText(email)
+    let copied = false
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(email)
+        copied = true
+      } catch {
+        // Fall back to the legacy copy command below.
+      }
+    }
+    if (!copied) {
+      const input = document.createElement('textarea')
+      input.value = email
+      input.setAttribute('readonly', '')
+      input.style.position = 'fixed'
+      input.style.opacity = '0'
+      document.body.appendChild(input)
+      input.select()
+      copied = document.execCommand('copy')
+      input.remove()
+    }
+    if (copied) {
       setCopiedEmail(email)
       toast(t('تم نسخ البريد الإلكتروني', 'Email copied'))
       window.setTimeout(() => setCopiedEmail(''), 1800)
-    } catch {
+    } else {
       toast(t('تعذّر النسخ، انسخ البريد يدويًا', 'Copy failed — please copy the email manually'), 'error')
     }
   }

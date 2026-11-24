@@ -3,27 +3,17 @@
  *
  * Navigation requests always go to the network first, so a new deployment is
  * never hidden behind an old HTML cache. Only built static assets (hashed by
- * Vite) and the app shell fallback are cached, and old caches are removed on
- * activation. API requests are never intercepted.
+ * Vite) and the app shell response are cached as they are requested, and old
+ * caches are removed on activation. API requests are never intercepted.
  */
 const CACHE_PREFIX = 'tawasol-static-'
-const CACHE_NAME = `${CACHE_PREFIX}v2`
+const CACHE_NAME = `${CACHE_PREFIX}v3`
 const SCOPE = self.registration.scope
 const APP_SHELL = new URL('index.html', SCOPE).href
-const PRECACHE_URLS = [
-  APP_SHELL,
-  new URL('icons/icon.svg', SCOPE).href,
-  new URL('manifest.webmanifest', SCOPE).href,
-]
 const STATIC_DESTINATIONS = ['style', 'script', 'image', 'font', 'manifest']
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(PRECACHE_URLS))
-      .catch(() => undefined)
-      .then(() => self.skipWaiting()),
-  )
+  event.waitUntil(self.skipWaiting())
 })
 
 self.addEventListener('activate', (event) => {

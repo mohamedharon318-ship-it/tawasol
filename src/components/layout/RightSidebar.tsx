@@ -75,14 +75,14 @@ export default function RightSidebar() {
         </section>
       )}
 
-      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-600 via-primary to-sky-500 p-5 text-white shadow-lg">
+      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-700 via-teal-700 to-sky-700 p-5 text-white shadow-lg dark:from-violet-900 dark:via-teal-900 dark:to-sky-950">
         <Sparkles className="absolute -left-6 -top-6 h-24 w-24 opacity-15" />
         <div className="relative">
-          <span className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-bold">
+          <span className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-black/20 px-2.5 py-1 text-[10px] font-bold">
             <Sparkles size={12} /> {t('مدعوم بالذكاء الاصطناعي', 'AI-powered')}
           </span>
           <h3 className="text-sm font-extrabold">{t('مساعد تواصل الذكي', 'Tawasol AI assistant')}</h3>
-          <p className="mt-1 text-xs leading-relaxed text-white/85">
+          <p className="mt-1 text-xs leading-relaxed text-white/90">
             {t('اكتب منشورًا، حسّن صياغته، ترجمه، أو اسأله أي سؤال. المساعد جاهز أسفل الشاشة 🤖', 'Draft or improve a post, translate it, or ask a question. Your assistant is available below 🤖')}
           </p>
         </div>

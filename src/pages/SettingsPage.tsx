@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Bell, Check, Globe2, Image as ImageIcon, LogOut, Moon, Palette, RefreshCw, ShieldCheck, Sun, Monitor, UserRound } from 'lucide-react'
+import { Bell, Check, Globe2, Image as ImageIcon, Info, LogOut, Moon, Palette, RefreshCw, ShieldCheck, Sun, Monitor, UserRound } from 'lucide-react'
 import Modal from '@/components/ui/Modal'
 import { useAuth } from '@/context/AuthContext'
 import { useLanguage } from '@/context/LanguageContext'
@@ -159,6 +159,10 @@ export default function SettingsPage() {
       </Section>
 
       <Section icon={UserRound} title={t('الحساب', 'Account')} subtitle={`${t('مسجّل الدخول كـ', 'Signed in as')} ${user.email}`}>
+        <p className="mb-3 flex items-start gap-2 rounded-xl bg-surface-2/60 p-3 text-[11px] leading-relaxed text-muted">
+          <Info size={14} className="mt-0.5 shrink-0 text-primary" />
+          {t('هذه نسخة تجريبية: المنشورات والرسائل والإعدادات محفوظة في هذا المتصفح فقط، ولا تشارك مع زوار آخرين.', 'This is a demo: posts, messages and settings are stored in this browser only and are not shared with other visitors.')}
+        </p>
         <div className="grid gap-2 sm:grid-cols-2">
           <button onClick={() => { logout(); navigate('/login'); toast(t('تم تسجيل الخروج', 'Signed out')) }} className="btn-danger">
             <LogOut size={16} /> {t('تسجيل الخروج', 'Sign out')}

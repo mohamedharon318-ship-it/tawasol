@@ -18,7 +18,7 @@
     <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
     <link rel="apple-touch-icon" href="/icons/icon.svg" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <!-- public/sw.js is intentionally not registered here; no offline claims are made. -->
+    <!-- public/sw.js is registered in src/main.tsx (production only). Navigations stay network-first so new deployments are never served from an old cache. -->
 
     <!--
       Development note: @vitejs/plugin-react injects an inline module script for React Refresh,

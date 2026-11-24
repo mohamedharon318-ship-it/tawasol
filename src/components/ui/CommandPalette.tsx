@@ -72,7 +72,6 @@ export default function CommandPalette() {
         type="button"
         onClick={() => setOpen(true)}
         className="flex w-full items-center gap-2 rounded-xl bg-surface-2 px-3 py-2.5 text-xs text-muted transition hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
-        aria-label={t('بحث عام', 'Global search')}
       >
         <Search size={16} />
         <span className="hidden flex-1 text-start sm:inline">{t('ابحث في تواصل...', 'Search Tawasol...')}</span>

@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { AlertCircle, ArrowLeft, Mail, Sparkles } from 'lucide-react'
+import { AlertCircle, ArrowLeft, Check, Copy, Info, Mail, Sparkles } from 'lucide-react'
 import PasswordInput from '@/components/ui/PasswordInput'
 import Spinner from '@/components/ui/Spinner'
 import Avatar from '@/components/ui/Avatar'
@@ -26,6 +26,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [copiedEmail, setCopiedEmail] = useState('')
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault()
@@ -61,6 +62,17 @@ export default function LoginPage() {
       setError((err as Error).message)
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function copyEmail(email: string) {
+    try {
+      await navigator.clipboard.writeText(email)
+      setCopiedEmail(email)
+      toast(t('تم نسخ البريد الإلكتروني', 'Email copied'))
+      window.setTimeout(() => setCopiedEmail(''), 1800)
+    } catch {
+      toast(t('تعذّر النسخ، انسخ البريد يدويًا', 'Copy failed — please copy the email manually'), 'error')
     }
   }
 
@@ -116,23 +128,43 @@ export default function LoginPage() {
             <Sparkles size={14} className="text-primary" />
             {t('أو جرّب التطبيق بحساب تجريبي', 'Or explore the app with a demo account')}
           </p>
-          <div className="grid gap-2 sm:grid-cols-2">
+          <p className="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-xl bg-primary-soft/50 px-3 py-2 text-[11px] text-muted">
+            <span>{t('كلمة المرور التجريبية', 'Demo password')}</span>
+            <code dir="ltr" className="rounded-md bg-surface px-1.5 py-0.5 font-bold text-ink">{DEMO_PASSWORD}</code>
+            <span className="text-primary">{t('— اضغط على أي حساب للدخول مباشرة', '— tap an account to sign in instantly')}</span>
+          </p>
+          <div className="space-y-2">
             {demoAccounts.map((account) => (
-              <button
-                key={account.id}
-                type="button"
-                onClick={() => void loginWithDemo(account)}
-                disabled={loading}
-                className="flex items-center gap-2.5 rounded-xl border border-line p-2.5 text-right transition hover:border-primary/40 hover:bg-primary-soft/40 disabled:opacity-50"
-              >
-                <Avatar user={account} size="sm" />
-                <span className="min-w-0">
-                  <span className="block truncate text-sm font-bold text-ink">{account.name}</span>
-                  <span className="block text-[10px] text-muted">{t('دخول تجريبي', 'Demo account')}</span>
-                </span>
-              </button>
+              <div key={account.id} className="flex items-center gap-2 rounded-xl border border-line p-2.5 transition hover:border-primary/40 hover:bg-primary-soft/40">
+                <button
+                  type="button"
+                  onClick={() => void loginWithDemo(account)}
+                  disabled={loading}
+                  className="flex min-w-0 flex-1 items-center gap-2.5 text-right disabled:opacity-50"
+                >
+                  <Avatar user={account} size="sm" />
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-bold text-ink">{account.name}</span>
+                    <span dir="ltr" className="block truncate text-[10px] text-muted">{account.email}</span>
+                    <span className="block text-[10px] text-primary">{t('دخول تجريبي', 'Demo account')}</span>
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void copyEmail(account.email)}
+                  aria-label={t(`نسخ بريد ${account.name}`, `Copy email for ${account.name}`)}
+                  title={t('نسخ البريد الإلكتروني', 'Copy email')}
+                  className="icon-btn h-9 w-9 shrink-0"
+                >
+                  {copiedEmail === account.email ? <Check size={16} className="text-primary" /> : <Copy size={16} />}
+                </button>
+              </div>
             ))}
           </div>
+          <p className="mt-3 flex items-start gap-2 text-[11px] leading-relaxed text-muted">
+            <Info size={14} className="mt-0.5 shrink-0 text-primary" />
+            {t('نسخة تجريبية: بياناتك محفوظة في هذا المتصفح فقط، ولا تظهر لزوار آخرين.', 'Demo only: your data stays in this browser and is not shared with other visitors.')}
+          </p>
         </div>
       </div>
 

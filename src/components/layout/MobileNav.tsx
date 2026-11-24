@@ -37,7 +37,7 @@ export default function MobileNav() {
             <span className="relative">
               <Icon size={21} strokeWidth={2} />
               {!!count && count > 0 && (
-                <span className="absolute -left-2 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-rose-500 px-0.5 text-[9px] text-white">
+                <span className="absolute -left-2 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-rose-600 px-0.5 text-[9px] text-white">
                   {count > 9 ? '٩+' : count}
                 </span>
               )}

@@ -101,7 +101,7 @@ export default function TopBar() {
 
 function Badge({ count }: { count: number }) {
   return (
-    <span className="absolute -left-1 -top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-rose-500 px-1 text-[10px] font-extrabold text-white">
+    <span className="absolute -left-1 -top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-rose-600 px-1 text-[10px] font-extrabold text-white">
       {count > 9 ? '٩+' : count}
     </span>
   )

@@ -82,7 +82,7 @@ body.bg-night {
   .btn-secondary { @apply btn bg-primary-soft text-primary hover:bg-primary/15; }
   .btn-ghost { @apply btn bg-surface-2 text-ink hover:brightness-95 dark:hover:brightness-110; }
   .btn-outline { @apply btn border border-line bg-transparent text-ink hover:bg-surface-2; }
-  .btn-danger { @apply btn bg-rose-500 text-white hover:bg-rose-600; }
+  .btn-danger { @apply btn bg-rose-600 text-white hover:bg-rose-700; }
 
   .input { @apply w-full rounded-xl border border-line bg-surface-2 px-4 py-3 text-sm font-medium text-ink outline-none transition placeholder:font-normal placeholder:text-muted focus:border-primary focus:bg-surface focus:ring-4 focus:ring-primary/10; }
   .label { @apply mb-1.5 block text-sm font-bold text-ink; }

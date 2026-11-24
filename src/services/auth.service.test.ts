@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { resetDB } from './db'
+import { KEYS, resetDB } from './db'
 import { getCurrentUser, login, logout, register } from './auth.service'
 import { getCachedApiUser, setApiToken, setCachedApiUser } from '@/lib/api'
+import { read, write } from '@/lib/storage'
+import { DEMO_PASSWORD } from '@/data/demo'
 import type { User } from '@/types'
 
 beforeEach(() => {
@@ -11,7 +13,7 @@ beforeEach(() => {
 
 describe('auth.service', () => {
   it('logs in a seeded user and hides the password', async () => {
-    const user = await login('mostafa@tawasol.com', '123456')
+    const user = await login('mostafa@tawasol.com', DEMO_PASSWORD)
     expect(user.email).toBe('mostafa@tawasol.com')
     expect('password' in user).toBe(false)
     expect(getCurrentUser()?.id).toBe(user.id)
@@ -19,6 +21,16 @@ describe('auth.service', () => {
 
   it('rejects a wrong password', async () => {
     await expect(login('mostafa@tawasol.com', 'wrong')).rejects.toThrow()
+  })
+
+  it('signs in a demo account even when its stored hash is stale', async () => {
+    const credentials = read<Array<{ userId: string; salt: string; hash: string }>>(KEYS.credentials, [])
+    write(KEYS.credentials, credentials.map((credential) =>
+      credential.userId === 'u1' ? { ...credential, hash: 'stale-demo-hash' } : credential))
+
+    const user = await login('mostafa@tawasol.com', DEMO_PASSWORD)
+
+    expect(user.email).toBe('mostafa@tawasol.com')
   })
 
   it('rejects a duplicate email on register', async () => {

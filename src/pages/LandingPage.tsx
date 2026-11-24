@@ -3,6 +3,7 @@ import { ArrowLeft, MessagesSquare, ShieldCheck, Sparkles, Users, Zap } from 'lu
 import Logo from '@/components/ui/Logo'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 import { useLanguage } from '@/context/LanguageContext'
+import { DEMO_PASSWORD } from '@/data/demo'
 
 export default function LandingPage() {
   const { t } = useLanguage()
@@ -54,7 +55,7 @@ export default function LandingPage() {
               <div id="demo" className="mt-9 max-w-md rounded-2xl border border-dashed border-primary/30 bg-surface/70 p-4">
                 <p className="flex items-center gap-2 text-xs font-extrabold text-primary"><Zap size={14} /> {t('حساب تجريبي جاهز', 'Try a demo account')}</p>
                 <p className="mt-2 text-sm text-muted" dir="ltr">
-                  mostafa@tawasol.com&nbsp;&nbsp;•&nbsp;&nbsp;123456
+                  mostafa@tawasol.com&nbsp;&nbsp;•&nbsp;&nbsp;{DEMO_PASSWORD}
                 </p>
                 <Link to="/login" className="mt-2 inline-block text-xs font-bold text-primary hover:underline">{t('جرّب تسجيل الدخول ←', 'Try signing in ←')}</Link>
               </div>

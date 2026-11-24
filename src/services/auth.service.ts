@@ -2,8 +2,8 @@ import { pick } from '@/lib/lang'
 import { delay, read, remove, uid, write } from '@/lib/storage'
 import { emailIsValid } from '@/lib/utils'
 import { hashPassword, verifyPassword } from '@/lib/security'
-import { DEMO_RESET_CODE } from '@/data/demo'
-import { defaultSettings } from '@/data/seed'
+import { DEMO_PASSWORD, DEMO_RESET_CODE } from '@/data/demo'
+import { defaultSettings, seedUsers } from '@/data/seed'
 import { KEYS, ensureDB } from './db'
 import type { Credential, User, UserSettings } from '@/types'
 import {
@@ -92,6 +92,15 @@ function findLocalUser(email: string): User | undefined {
     item.email.toLowerCase() === email.trim().toLowerCase())
 }
 
+function findDemoUser(email: string): User | undefined {
+  const normalized = email.trim().toLowerCase()
+  return seedUsers.find((user) => user.email.toLowerCase() === normalized)
+}
+
+function isCurrentDemoCredential(email: string, password: string): boolean {
+  return password === DEMO_PASSWORD && !!findDemoUser(email)
+}
+
 function credentialsFor(userId: string): Credential | undefined {
   return read<Credential[]>(KEYS.credentials, []).find((item) => item.userId === userId)
 }
@@ -124,6 +133,12 @@ export async function login(email: string, password: string): Promise<User> {
 
   ensureDB()
   if (localCredentialsMatch(email, password)) return loginLocal(email, password)
+  // Old browser data can still hold a hash from a previous demo password.
+  // Never send demo credentials to the API, whose validation rejects them.
+  if (isCurrentDemoCredential(email, password)) return loginLocal(email, password)
+  if (findDemoUser(email)) {
+    throw new Error(pick('كلمة المرور غير صحيحة، حاول مرة أخرى', 'Incorrect password, please try again'))
+  }
 
   try {
     const payload = await apiRequest<AuthApiPayload>('/users/signin', {
@@ -149,7 +164,7 @@ export async function loginLocal(email: string, password: string): Promise<User>
   await delay(500)
   const user = findLocalUser(email)
   if (!user) throw new Error(pick('لا يوجد حساب مسجّل بهذا البريد الإلكتروني', 'No account is registered with this email'))
-  if (!localCredentialsMatch(email, password)) {
+  if (!isCurrentDemoCredential(email, password) && !localCredentialsMatch(email, password)) {
     throw new Error(pick('كلمة المرور غير صحيحة، حاول مرة أخرى', 'Incorrect password, please try again'))
   }
 

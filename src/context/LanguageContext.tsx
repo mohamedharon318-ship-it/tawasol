@@ -14,8 +14,8 @@ interface LanguageContextValue {
 const LanguageContext = createContext<LanguageContextValue | null>(null)
 
 const pageText = {
-  ar: { title: 'تواصل — تواصل مع من تحب', description: 'تواصل — منصة اجتماعية عربية تجمعك بأحبائك وأصدقائك' },
-  en: { title: 'Tawasol — Connect with your people', description: 'Tawasol — a social platform to connect with friends and family' },
+  ar: { title: 'تواصل', description: 'تواصل — منصة اجتماعية عربية تجمعك بأحبائك وأصدقائك' },
+  en: { title: 'Tawasol', description: 'Tawasol — a social platform to connect with friends and family' },
 }
 
 function applyLanguage(language: UserSettings['language']) {

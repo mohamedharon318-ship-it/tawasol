@@ -54,7 +54,7 @@ export default function LandingPage() {
               <div id="demo" className="mt-9 max-w-md rounded-2xl border border-dashed border-primary/30 bg-surface/70 p-4">
                 <p className="flex items-center gap-2 text-xs font-extrabold text-primary"><Zap size={14} /> {t('حساب تجريبي جاهز', 'Try a demo account')}</p>
                 <p className="mt-2 text-sm text-muted" dir="ltr">
-                  ahmed@tawasol.com&nbsp;&nbsp;•&nbsp;&nbsp;123456
+                  mostafa@tawasol.com&nbsp;&nbsp;•&nbsp;&nbsp;123456
                 </p>
                 <Link to="/login" className="mt-2 inline-block text-xs font-bold text-primary hover:underline">{t('جرّب تسجيل الدخول ←', 'Try signing in ←')}</Link>
               </div>

@@ -40,7 +40,7 @@ describe('users.service', () => {
       joinedAt: '2026-11-22T00:00:00.000Z',
     }))
 
-    expect(getUser('u1')?.email).toBe('ahmed@tawasol.com')
+    expect(getUser('u1')?.email).toBe('mostafa@tawasol.com')
   })
 
   it('saves profile edits for the cached API user', async () => {

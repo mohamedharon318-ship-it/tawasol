@@ -11,18 +11,18 @@ beforeEach(() => {
 
 describe('auth.service', () => {
   it('logs in a seeded user and hides the password', async () => {
-    const user = await login('ahmed@tawasol.com', '123456')
-    expect(user.email).toBe('ahmed@tawasol.com')
+    const user = await login('mostafa@tawasol.com', '123456')
+    expect(user.email).toBe('mostafa@tawasol.com')
     expect('password' in user).toBe(false)
     expect(getCurrentUser()?.id).toBe(user.id)
   })
 
   it('rejects a wrong password', async () => {
-    await expect(login('ahmed@tawasol.com', 'wrong')).rejects.toThrow()
+    await expect(login('mostafa@tawasol.com', 'wrong')).rejects.toThrow()
   })
 
   it('rejects a duplicate email on register', async () => {
-    await expect(register({ name: 'Test User', email: 'AHMED@tawasol.com', password: '123456', confirmPassword: '123456' })).rejects.toThrow()
+    await expect(register({ name: 'Test User', email: 'MOSTAFA@tawasol.com', password: '123456', confirmPassword: '123456' })).rejects.toThrow()
   })
 
   it('registers a new user and starts a session', async () => {

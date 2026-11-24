@@ -23,12 +23,12 @@ const uploadedAvatars = [
 
 export const seedUsers: User[] = [
   {
-    id: 'u1', name: 'أحمد محمد', email: 'ahmed@tawasol.com',
+    id: 'u1', name: 'مصطفي شحات', email: 'mostafa@tawasol.com',
     avatar: uploadedAvatars[0], bio: 'مهندس برمجيات، أحب القراءة والقهوة ☕', location: 'القاهرة، مصر',
     work: 'مهندس في شركة ناشئة', cover: 'from-sky-500 via-blue-500 to-indigo-600', joinedAt: ago(60 * 24 * 400),
   },
   {
-    id: 'u2', name: 'سارة عبدالله', email: 'sara@tawasol.com', verified: true, lastSeen: ago(2),
+    id: 'u2', name: 'محمد ايمن', email: 'ayman@tawasol.com', verified: true, lastSeen: ago(2),
     avatar: uploadedAvatars[1], bio: 'مصمّمة تجربة مستخدم، أؤمن بالتفاصيل الصغيرة ✨', location: 'الرياض، السعودية',
     work: 'UX Designer', cover: 'from-rose-400 via-pink-500 to-fuchsia-600', joinedAt: ago(60 * 24 * 320),
   },

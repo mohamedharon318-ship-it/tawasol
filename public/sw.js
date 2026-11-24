@@ -7,7 +7,7 @@
  * caches are removed on activation. API requests are never intercepted.
  */
 const CACHE_PREFIX = 'tawasol-static-'
-const CACHE_NAME = `${CACHE_PREFIX}v3`
+const CACHE_NAME = `${CACHE_PREFIX}v4`
 const SCOPE = self.registration.scope
 const APP_SHELL = new URL('index.html', SCOPE).href
 const STATIC_DESTINATIONS = ['style', 'script', 'image', 'font', 'manifest']
@@ -34,6 +34,12 @@ async function cacheStatic(request, response) {
   await cache.put(request, response.clone())
 }
 
+async function fetchAndCache(request) {
+  const response = await fetch(request)
+  await cacheStatic(request, response)
+  return response
+}
+
 self.addEventListener('fetch', (event) => {
   const { request } = event
   if (request.method !== 'GET') return
@@ -44,29 +50,20 @@ self.addEventListener('fetch', (event) => {
   if (url.pathname.includes('/api/')) return
 
   if (request.mode === 'navigate') {
+    const network = fetchAndCache(request)
+    event.waitUntil(network.catch(() => undefined))
     event.respondWith(
-      fetch(request)
-        .then((response) => {
-          void cacheStatic(request, response)
-          return response
-        })
-        .catch(async () => (await caches.match(APP_SHELL)) || (await caches.match(request)) || Response.error()),
+      network.catch(async () =>
+        (await caches.match(APP_SHELL)) || (await caches.match(request)) || Response.error()),
     )
     return
   }
 
   if (!STATIC_DESTINATIONS.includes(request.destination)) return
 
+  const network = fetchAndCache(request)
+  event.waitUntil(network.catch(() => undefined))
   event.respondWith(
-    caches.match(request).then((cached) => {
-      const network = fetch(request)
-        .then((response) => {
-          void cacheStatic(request, response)
-          return response
-        })
-        .catch(() => cached || Response.error())
-
-      return cached || network
-    }),
+    caches.match(request).then((cached) => cached || network.catch(() => cached || Response.error())),
   )
 })

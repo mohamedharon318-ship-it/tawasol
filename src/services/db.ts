@@ -1,7 +1,7 @@
 import { clearAll, read, write } from '@/lib/storage'
 import { clearApiSession } from '@/lib/api'
 import { DEMO_PASSWORD } from '@/data/demo'
-import { hashPassword } from '@/lib/security'
+import { DEMO_SALT, hashPassword } from '@/lib/security'
 import {
   defaultSettings, seedConversations, seedFriendRequests, seedNotifications, seedPosts, seedStories, seedUsers,
 } from '@/data/seed'
@@ -46,6 +46,26 @@ export function migrateLegacyDemoNames(users: User[]): User[] {
   })
 }
 
+export function repairDemoData(): void {
+  const storedUsers = read<User[]>(KEYS.users, [])
+  const renamedUsers = migrateLegacyDemoNames(storedUsers)
+  const userIds = new Set(renamedUsers.map((user) => user.id))
+  const users = [...renamedUsers, ...seedUsers.filter((user) => !userIds.has(user.id))]
+  if (users.length !== storedUsers.length || users.some((user, index) => user !== storedUsers[index])) {
+    write(KEYS.users, users)
+  }
+
+  const storedCredentials = read<Credential[]>(KEYS.credentials, [])
+  const credentialUserIds = new Set(storedCredentials.map((credential) => credential.userId))
+  const credentials = [
+    ...storedCredentials,
+    ...seedUsers
+      .filter((user) => !credentialUserIds.has(user.id))
+      .map((user) => ({ userId: user.id, salt: DEMO_SALT, hash: hashPassword(DEMO_PASSWORD) })),
+  ]
+  if (credentials.length !== storedCredentials.length) write(KEYS.credentials, credentials)
+}
+
 let initialized = false
 
 export function ensureDB(): void {
@@ -54,7 +74,7 @@ export function ensureDB(): void {
   if (read<Credential[] | null>(KEYS.credentials, null) === null) {
     write(KEYS.credentials, seedUsers.map((user) => ({
       userId: user.id,
-      salt: 'tawasol-demo-v1',
+      salt: DEMO_SALT,
       hash: hashPassword(DEMO_PASSWORD),
     })))
   }
@@ -67,10 +87,9 @@ export function ensureDB(): void {
   if (read<Report[] | null>(KEYS.reports, null) === null) write(KEYS.reports, [])
   if (read<SearchEntry[] | null>(KEYS.searchHistory, null) === null) write(KEYS.searchHistory, [])
 
-  const storedUsers = read<User[]>(KEYS.users, [])
-  const users = migrateLegacyDemoNames(storedUsers)
-  if (users.some((user, index) => user !== storedUsers[index])) write(KEYS.users, users)
+  repairDemoData()
 
+  const users = read<User[]>(KEYS.users, [])
   const settings = read<Record<string, UserSettings>>(KEYS.settings, {})
   users.forEach((user) => {
     if (!settings[user.id]) settings[user.id] = defaultSettings(user.id)

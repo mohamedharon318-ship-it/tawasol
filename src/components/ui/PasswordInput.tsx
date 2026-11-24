@@ -13,7 +13,7 @@ export default function PasswordInput({ wrapperClassName = '', ...props }: Props
       <button
         type="button"
         onClick={() => setVisible((value) => !value)}
-        className="absolute left-3 top-1/2 -translate-y-1/2 text-muted transition hover:text-primary"
+        className="absolute left-1.5 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-lg text-muted transition hover:bg-surface-2 hover:text-primary"
         aria-label={visible ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور'}
       >
         {visible ? <EyeOff size={18} /> : <Eye size={18} />}

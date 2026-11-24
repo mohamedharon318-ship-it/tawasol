@@ -1,7 +1,7 @@
 import { pick } from '@/lib/lang'
 import { delay, read, remove, uid, write } from '@/lib/storage'
 import { emailIsValid } from '@/lib/utils'
-import { hashPassword, verifyPassword } from '@/lib/security'
+import { DEMO_SALT, hashPassword, verifyPassword } from '@/lib/security'
 import { DEMO_PASSWORD, DEMO_RESET_CODE } from '@/data/demo'
 import { defaultSettings, seedUsers } from '@/data/seed'
 import { KEYS, ensureDB } from './db'
@@ -162,9 +162,26 @@ export async function login(email: string, password: string): Promise<User> {
 export async function loginLocal(email: string, password: string): Promise<User> {
   ensureDB()
   await delay(500)
-  const user = findLocalUser(email)
+  let user = findLocalUser(email)
+  const demoLogin = isCurrentDemoCredential(email, password)
+  if (!user && demoLogin) {
+    const demoUser = findDemoUser(email)
+    if (demoUser) {
+      const users = read<User[]>(KEYS.users, [])
+      if (!users.some((item) => item.id === demoUser.id)) write(KEYS.users, [...users, demoUser])
+      const credentials = read<Credential[]>(KEYS.credentials, [])
+      if (!credentials.some((item) => item.userId === demoUser.id)) {
+        write(KEYS.credentials, [...credentials, {
+          userId: demoUser.id,
+          salt: DEMO_SALT,
+          hash: hashPassword(DEMO_PASSWORD),
+        }])
+      }
+      user = demoUser
+    }
+  }
   if (!user) throw new Error(pick('لا يوجد حساب مسجّل بهذا البريد الإلكتروني', 'No account is registered with this email'))
-  if (!isCurrentDemoCredential(email, password) && !localCredentialsMatch(email, password)) {
+  if (!demoLogin && !localCredentialsMatch(email, password)) {
     throw new Error(pick('كلمة المرور غير صحيحة، حاول مرة أخرى', 'Incorrect password, please try again'))
   }
 

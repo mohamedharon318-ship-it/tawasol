@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { KEYS, migrateLegacyDemoNames, repairDemoData, resetDB } from './db'
+import { KEYS, migrateLegacyDemoNames, resetDB } from './db'
 import { getCurrentUser, login, logout, register } from './auth.service'
 import { getCachedApiUser, setApiToken, setCachedApiUser } from '@/lib/api'
 import { read, write } from '@/lib/storage'
@@ -40,15 +40,15 @@ describe('auth.service', () => {
     expect(migrated.name).toBe('Mustafa Shehata')
   })
 
-  it('restores a missing demo account from partial localStorage data', async () => {
+  it('logs in a demo account even if it is absent from localStorage', async () => {
     write(KEYS.users, read<User[]>(KEYS.users, []).filter((user) => user.id !== 'u1'))
     write(KEYS.credentials, read<Array<{ userId: string }>>(KEYS.credentials, [])
       .filter((credential) => credential.userId !== 'u1'))
 
-    repairDemoData()
-
     const user = await login('mostafa@tawasol.com', DEMO_PASSWORD)
+
     expect(user.email).toBe('mostafa@tawasol.com')
+    expect(read<User[]>(KEYS.users, []).some((item) => item.id === 'u1')).toBe(true)
   })
 
   it('rejects a duplicate email on register', async () => {

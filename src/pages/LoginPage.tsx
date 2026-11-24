@@ -67,7 +67,7 @@ export default function LoginPage() {
   return (
     <div>
       <div className="mb-7 text-center">
-        <h1 className="text-3xl font-extrabold text-ink">{t('مرحبًا بعودتك 👋', 'Welcome back 👋')}</h1>
+        <h1 className="text-3xl font-extrabold text-ink">{t('أهلًا بك في تواصل 👋', 'Welcome to Tawasol 👋')}</h1>
         <p className="mt-2 text-sm text-muted">{t('سجّل دخولك وتابع ما يحدث عند أصدقائك', 'Sign in to see what your friends are sharing')}</p>
       </div>
 

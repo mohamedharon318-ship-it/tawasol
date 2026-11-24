@@ -101,10 +101,11 @@ export default function LandingPage() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 text-center text-xs text-muted sm:flex-row">
           <Logo compact />
           <p>{t('تواصل ©', 'Tawasol ©')} {new Date().getFullYear()} — {t('صُنع بحب للعربية ❤️', 'Made with love ❤️')}</p>
-          <p>
-            {t('تم إنشاء الموقع بواسطة', 'Built by')}{' '}
-            <bdi dir="ltr" className="font-semibold">{'Mohamed Ayman & Mostafa Shaehat'}</bdi>
-          </p>
+          <div className="flex flex-col items-center gap-0.5 text-center">
+            <p>{t('تم إنشاء الموقع بواسطة', 'Built by')}</p>
+            <p dir="ltr" className="font-semibold">Mohamed Ayman</p>
+            <p dir="ltr" className="font-semibold">Mostafa Shaehat</p>
+          </div>
         </div>
       </footer>
     </div>

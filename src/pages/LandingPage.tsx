@@ -103,8 +103,7 @@ export default function LandingPage() {
           <p>{t('تواصل ©', 'Tawasol ©')} {new Date().getFullYear()} — {t('صُنع بحب للعربية ❤️', 'Made with love ❤️')}</p>
           <p>
             {t('تم إنشاء الموقع بواسطة', 'Built by')}{' '}
-            <bdi dir="ltr">م. Mohamed Ayman</bdi> {t('و', 'and')}{' '}
-            <bdi dir="ltr">م. Mostafa Shaehat</bdi>
+            <bdi dir="ltr" className="font-semibold">{'Mohamed Ayman & Mostafa Shaehat'}</bdi>
           </p>
         </div>
       </footer>
